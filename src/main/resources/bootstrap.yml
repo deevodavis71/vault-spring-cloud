@@ -1,0 +1,34 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gs-vault-config
+  cloud:
+    vault:
+      fail-fast: true
+      token: s.zY0cjEVnTijIGrlsexemgkrQ
+      scheme: http
+      kv:
+        enabled: true
+      mysql:
+        enabled: true
+        role: read-only
+        #role: read-write
+        backend: database
+        username-property: spring.datasource.username
+        password-property: spring.datasource.password
+  datasource:
+    url: jdbc:mysql://localhost:3306/db1
+    username: rootXX
+    password: exampleXX
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
