@@ -7,21 +7,26 @@ spring:
   cloud:
     vault:
       fail-fast: true
-      token: s.zY0cjEVnTijIGrlsexemgkrQ
+      token: my-token # Change in real-world scenarios!!
       scheme: http
+      config:
+        lifecycle:
+          enabled: true
+          min-renewal: 10s
+          expiry-threshold: 1m
       kv:
         enabled: true
       mysql:
         enabled: true
-        role: read-only
-        #role: read-write
+        #role: read-only
+        role: read-write # Needs to start first time in rw mode so as to create the tables!!
         backend: database
         username-property: spring.datasource.username
         password-property: spring.datasource.password
   datasource:
     url: jdbc:mysql://localhost:3306/db1
-    username: rootXX
-    password: exampleXX
+    username: this-will-be-set-dynamically-by-vault
+    password: this-will-be-set-dynamically-by-vault
   jpa:
     open-in-view: false
     hibernate:
@@ -32,3 +37,19 @@ management:
     web:
       exposure:
         include: "*"
+
+logging:
+  level:
+    root: INFO
+    org:
+      springframework: WARN
+      hibernate:
+        #SQL: DEBUG
+        #type: TRACE
+        engine:
+          jdbc:
+            env:
+              internal:
+                LobCreatorBuilderImpl: WARN            # inhibit horrid warning exception thrown by hibernate related to LOB support
+    com:
+      sjd: TRACE

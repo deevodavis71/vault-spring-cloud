@@ -1,0 +1,32 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+
+  vault:
+    container_name: vault
+    image: vault:latest
+    command: server -dev
+    ports:
+      - 8200:8200
+    environment:
+      - VAULT_ADDR=http://127.0.0.1:8200
+      - VAULT_DEV_ROOT_TOKEN_ID=my-token
+    networks:
+      - vault_net
+
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: db1
+    networks:
+      - vault_net
+
+networks:
+  vault_net:
+    driver: bridge
