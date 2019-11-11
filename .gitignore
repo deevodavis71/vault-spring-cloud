@@ -30,5 +30,5 @@ build/
 ### VS Code ###
 .vscode/
 
-### Vault Binary
-vault
+### Vault Binary ###
+/vault
