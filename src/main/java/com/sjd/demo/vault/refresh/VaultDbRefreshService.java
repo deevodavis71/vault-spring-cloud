@@ -33,7 +33,7 @@ public class VaultDbRefreshService {
     private String vaultPath = "database/creds/read-write";
 
     //@Scheduled(cron = "${my.vault.token.renew.cron.expression}")
-    @Scheduled(initialDelay = 1000000, fixedDelay = 1000000)
+    //@Scheduled(initialDelay = 1000000, fixedDelay = 1000000)
     public void renewMyRootToken() throws Exception {
 
         log.debug("Renewing root token ...");
@@ -47,8 +47,8 @@ public class VaultDbRefreshService {
 
     }
 
-    //@Scheduled(cron = "${my.vault.credentials.renew.cron.expression}")
-    @Scheduled(initialDelay = 1000000, fixedDelay = 1000000)
+    //@Scheduled(cron = "${swift.credentials.renew-every}")
+    @Scheduled(initialDelay = 120_000, fixedDelay = 120_000)
     public void attemptARefresh() {
 
         log.debug("Renewing db creds ...");

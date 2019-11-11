@@ -21,8 +21,8 @@ spring:
         #role: read-only
         role: read-write # Needs to start first time in rw mode so as to create the tables!!
         backend: database
-        username-property: spring.datasource.username
-        password-property: spring.datasource.password
+        username-property: swift.projection.vault.database.username
+        password-property: swift.projection.vault.database.password
   datasource:
     url: jdbc:mysql://localhost:3306/db1
     username: this-will-be-set-dynamically-by-vault
@@ -31,6 +31,20 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: update
+
+swift:
+  projection:
+    vault:
+      database:
+        driverClassName: com.mysql.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/db1
+        username: root
+        password: example
+        hibernateDialect: org.hibernate.dialect.MySQL5Dialect
+        hibernateDdl: update
+  credentials:
+    renew-every: "*/2 * * * * ?"
+
 
 management:
   endpoints:
