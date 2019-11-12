@@ -3,7 +3,7 @@
 
 #########################################
 
-all: up write-kv create-encryption-key setup-db-and-roles
+start-all: up write-kv create-encryption-key setup-db-and-roles create-username-kv
 
 #########################################
 
@@ -26,6 +26,10 @@ write-kv:
 
 read-kv:
 	./vault kv get secret/my-secret
+
+create-username-kv:
+	./vault kv put secret/gs-vault-config example.username=demouser example.password=demopassword
+	./vault kv put secret/gs-vault-config/cloud example.username=clouduser example.password=cloudpassword
 
 #########################################
 
@@ -70,3 +74,7 @@ read-actors:
 
 write-actor:
 	curl -X POST http://localhost:8080/api/actors
+
+refresh:
+	curl -X POST http://localhost:8080/actuator/refresh
+
