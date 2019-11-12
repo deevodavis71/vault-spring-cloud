@@ -1,4 +1,4 @@
-package com.sjd.demo.vault.dto;
+package com.sjd.demo.vault.dto.refresh;
 
 import lombok.Data;
 

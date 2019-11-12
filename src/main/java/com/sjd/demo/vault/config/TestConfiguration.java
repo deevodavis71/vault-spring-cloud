@@ -8,7 +8,7 @@ import lombok.Data;
 @Configuration
 @ConfigurationProperties("example")
 @Data
-public class MyConfiguration {
+public class TestConfiguration {
 
     private String username;
 

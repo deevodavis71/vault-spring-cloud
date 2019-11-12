@@ -1,10 +1,11 @@
 package com.sjd.demo.vault.refresh;
 
+import static org.springframework.http.HttpStatus.OK;
+
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
-import com.sjd.demo.vault.dto.CredentialsDto;
+import com.sjd.demo.vault.dto.refresh.CredentialsDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,9 +42,9 @@ public class VaultDbRefreshService {
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Vault-Token", vaultRootToken);
         headers.add("Cache-Control", "no-cache");
-        String vaultUrl = vaultScheme + "://" + vaultHost + ":" + vaultPort + "/v1/auth/token/renew-self";
 
-        new RestTemplate().exchange(vaultUrl, HttpMethod.POST, new HttpEntity<>(headers), String.class);
+        new RestTemplate().exchange(vaultScheme + "://" + vaultHost + ":" + vaultPort + "/v1/auth/token/renew-self", //
+                HttpMethod.POST, new HttpEntity<>(headers), String.class);
 
     }
 
@@ -53,16 +54,11 @@ public class VaultDbRefreshService {
 
         log.debug("Renewing db creds ...");
 
-        // This calls Vault to fetch new credentials
-        getAndStoreCredentials(); // this method is explained below
+        getAndStoreCredentials();
 
-        if (!credentialsDto.isLastSuccessful()) // this flag is explained below
-        {
+        if (!credentialsDto.isLastSuccessful()) {
             return;
         }
-
-        //Prepare a self-call so that spring knows it has to refresh some beans
-        String refreshUrl = "http://localhost:" + serverPort + "/actuator/refresh";
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -70,8 +66,8 @@ public class VaultDbRefreshService {
 
         log.debug("Refreshing ...");
 
-        // invoke the self-call
-        new RestTemplate().exchange(refreshUrl, HttpMethod.POST, httpEntity, String.class);
+        new RestTemplate().exchange("http://localhost:" + serverPort + "/actuator/refresh", //
+                HttpMethod.POST, httpEntity, String.class);
 
     }
 
@@ -91,7 +87,7 @@ public class VaultDbRefreshService {
         String latestDbUserName = null;
         String latestDbPassword = null;
 
-        if (response != null && HttpStatus.OK == response.getStatusCode()) {
+        if (OK == response.getStatusCode()) {
 
             String vaultJsonString = response.getBody();
             JSONObject vaultJsonObject = new JSONObject(vaultJsonString);
@@ -106,9 +102,10 @@ public class VaultDbRefreshService {
         credentialsDto.setLastSuccessful(vaultCallSuccess);
 
         if (vaultCallSuccess) {
-            // Save credentials in a singleton bean.
+
             credentialsDto.setPresentlyWorkingUserName(latestDbUserName);
             credentialsDto.setPresentlyWorkingPassword(latestDbPassword);
+
         }
 
         log.debug("vaultCallSuccess : {}", vaultCallSuccess);

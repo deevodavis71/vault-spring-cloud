@@ -1,12 +1,7 @@
-package com.sjd.demo.vault.dto;
+package com.sjd.demo.vault.dto.refresh;
 
 import lombok.Data;
 
-/**
- * The type Database properties.
- * <p>
- * Used as a placeholder for standard JPA db-related properties
- */
 @Data
 public class DatabasePropertiesDto {
 
