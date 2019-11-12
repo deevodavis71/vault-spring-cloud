@@ -107,8 +107,8 @@ public class VaultDbRefreshService {
 
         if (vaultCallSuccess) {
 
-            credentialsDto.setPresentlyWorkingUserName(latestDbUserName);
-            credentialsDto.setPresentlyWorkingPassword(latestDbPassword);
+            credentialsDto.setWorkingUserName(latestDbUserName);
+            credentialsDto.setWorkingPassword(latestDbPassword);
 
         }
 

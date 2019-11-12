@@ -5,10 +5,12 @@ import lombok.Data;
 @Data
 public class CredentialsDto {
 
-    private boolean lastSuccessful = false;
+    private boolean initialised;
 
-    private String presentlyWorkingUserName = null;
+    private boolean lastSuccessful;
 
-    private String presentlyWorkingPassword = null;
+    private String workingUserName;
+
+    private String workingPassword;
 
 }

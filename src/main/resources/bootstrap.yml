@@ -23,10 +23,10 @@ spring:
         backend: database
         username-property: swift.projection.vault.database.username
         password-property: swift.projection.vault.database.password
-  datasource:
-    url: jdbc:mysql://localhost:3306/db1
-    username: this-will-be-set-dynamically-by-vault
-    password: this-will-be-set-dynamically-by-vault
+  #datasource:
+  #  url: jdbc:mysql://localhost:3306/db1
+  #  username: this-will-be-set-dynamically-by-vault
+  #  password: this-will-be-set-dynamically-by-vault
   jpa:
     open-in-view: false
     hibernate:
@@ -43,7 +43,7 @@ swift:
         hibernateDialect: org.hibernate.dialect.MySQL5Dialect
         hibernateDdl: update
   credentials:
-    renew-every: "*/2 * * * * ?"
+    renew-every: "*/60 * * * * ?"
 
 
 management:

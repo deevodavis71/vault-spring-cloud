@@ -48,10 +48,10 @@ setup-db:
 	./vault write database/config/db1 plugin_name=mysql-database-plugin connection_url="{{username}}:{{password}}@tcp(mysql:3306)/" allowed_roles="read-only,read-write" username="root" password="example"
 
 create-db-user:
-	./vault write database/roles/read-only db_name=db1 creation_statements="CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}'; GRANT SELECT ON *.* TO '{{name}}'@'%';" default_ttl="3m" max_ttl="3m"
+	./vault write database/roles/read-only db_name=db1 creation_statements="CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}'; GRANT SELECT ON *.* TO '{{name}}'@'%';" default_ttl="30s" max_ttl="30s"
 
 create-db-user-rw:
-	./vault write database/roles/read-write db_name=db1 creation_statements="CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}'; GRANT ALL PRIVILEGES ON *.* TO '{{name}}'@'%';" default_ttl="3m" max_ttl="3m"
+	./vault write database/roles/read-write db_name=db1 creation_statements="CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}'; GRANT ALL PRIVILEGES ON *.* TO '{{name}}'@'%';" default_ttl="30s" max_ttl="30s"
 
 setup-db-and-roles: setup-db create-db-user create-db-user-rw
 
