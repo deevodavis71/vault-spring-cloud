@@ -8,7 +8,7 @@ import lombok.Data;
  * Used as a placeholder for standard JPA db-related properties
  */
 @Data
-public class DatabaseProperties {
+public class DatabasePropertiesDto {
 
     private static final int MIN_IDLE = 3;
 

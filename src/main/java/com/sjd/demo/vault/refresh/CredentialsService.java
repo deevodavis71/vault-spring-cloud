@@ -4,15 +4,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.sjd.demo.vault.dto.CredentialsBeanDto;
+import com.sjd.demo.vault.dto.CredentialsDto;
 
 @Component
-public class CredentialsBeanService {
+public class CredentialsService {
 
     @Bean
     @Scope(value = "singleton")
-    public CredentialsBeanDto createMyDbCredentialsBean() {
-        return new CredentialsBeanDto();
+    public CredentialsDto createMyDbCredentialsBean() {
+        return new CredentialsDto();
     }
 
 }

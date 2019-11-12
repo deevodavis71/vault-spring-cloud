@@ -13,7 +13,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.sjd.demo.vault.dto.DatabaseProperties;
+import com.sjd.demo.vault.dto.DatabasePropertiesDto;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -52,7 +52,7 @@ public class VaultPersistenceConfig {
 
     private Properties hibernateProperties() {
 
-        DatabaseProperties dbProps = databaseProperties();
+        DatabasePropertiesDto dbProps = databaseProperties();
 
         final Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.dialect", dbProps.getHibernateDialect());
@@ -87,9 +87,9 @@ public class VaultPersistenceConfig {
 
     @Bean
     @ConfigurationProperties(prefix = "swift.projection." + PROJECTION_NAME + ".database")
-    public DatabaseProperties databaseProperties() {
+    public DatabasePropertiesDto databaseProperties() {
 
-        return new DatabaseProperties();
+        return new DatabasePropertiesDto();
 
     }
 

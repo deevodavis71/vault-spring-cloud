@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.sjd.demo.vault.dto.CredentialsBeanDto;
+import com.sjd.demo.vault.dto.CredentialsDto;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class DataSourceConfiguration {
 
-    private final CredentialsBeanDto credentialsBeanDto;
+    private final CredentialsDto credentialsDto;
 
     private final VaultDbRefreshService vaultDbRefreshService;
 
@@ -33,14 +33,14 @@ public class DataSourceConfiguration {
         log.debug("Called datasource...");
 
         // call Vault if the credentials have not already been refreshed
-        if (!credentialsBeanDto.isLastSuccessful()) {
+        if (!credentialsDto.isLastSuccessful()) {
             vaultDbRefreshService.getAndStoreCredentials();
         }
 
         HikariConfig jdbcConfig = new HikariConfig();
 
-        jdbcConfig.setUsername(credentialsBeanDto.getPresentlyWorkingUserName());
-        jdbcConfig.setPassword(credentialsBeanDto.getPresentlyWorkingPassword());
+        jdbcConfig.setUsername(credentialsDto.getPresentlyWorkingUserName());
+        jdbcConfig.setPassword(credentialsDto.getPresentlyWorkingPassword());
         jdbcConfig.setJdbcUrl(databaseUrl); // database URL from application properties
 
         log.debug("jdbcConfig : {}, {}, {}", jdbcConfig.getUsername(), jdbcConfig.getPassword(),

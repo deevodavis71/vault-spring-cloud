@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
-import com.sjd.demo.vault.dto.CredentialsBeanDto;
+import com.sjd.demo.vault.dto.CredentialsDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class VaultDbRefreshService {
 
-    private final CredentialsBeanDto credentialsBeanDto;
+    private final CredentialsDto credentialsDto;
 
     private int serverPort = 8080;
 
@@ -56,7 +56,7 @@ public class VaultDbRefreshService {
         // This calls Vault to fetch new credentials
         getAndStoreCredentials(); // this method is explained below
 
-        if (!credentialsBeanDto.isLastSuccessful()) // this flag is explained below
+        if (!credentialsDto.isLastSuccessful()) // this flag is explained below
         {
             return;
         }
@@ -103,12 +103,12 @@ public class VaultDbRefreshService {
 
         }
 
-        credentialsBeanDto.setLastSuccessful(vaultCallSuccess);
+        credentialsDto.setLastSuccessful(vaultCallSuccess);
 
         if (vaultCallSuccess) {
             // Save credentials in a singleton bean.
-            credentialsBeanDto.setPresentlyWorkingUserName(latestDbUserName);
-            credentialsBeanDto.setPresentlyWorkingPassword(latestDbPassword);
+            credentialsDto.setPresentlyWorkingUserName(latestDbUserName);
+            credentialsDto.setPresentlyWorkingPassword(latestDbPassword);
         }
 
         log.debug("vaultCallSuccess : {}", vaultCallSuccess);
