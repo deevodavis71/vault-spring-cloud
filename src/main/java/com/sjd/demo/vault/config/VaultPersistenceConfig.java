@@ -50,7 +50,7 @@ public class VaultPersistenceConfig {
         factoryBean.setDataSource(dataSource);
         factoryBean.setJpaVendorAdapter(jpaVendorAdapter);
         factoryBean.setJpaProperties(hibernateProperties());
-        factoryBean.setPackagesToScan("com.sjd");
+        factoryBean.setPackagesToScan("com.sjd.demo");
         factoryBean.setPersistenceUnitName("persistence-unit-proj-" + PROJECTION_NAME);
 
         return factoryBean;
@@ -102,30 +102,7 @@ public class VaultPersistenceConfig {
         return new HikariDataSource(jdbcConfig);
 
     }
-
-    /*
-    @RefreshScope
-    @Bean
-    public DataSource dataSource() {
-
-        DatabaseProperties dbProps = databaseProperties();
-
-        HikariConfig dataSourceConfig = new HikariConfig();
-        dataSourceConfig.setPoolName("HikariPool-" + PROJECTION_NAME);
-        //dataSourceConfig.setDriverClassName(dbProps.getDriverClassName());
-        dataSourceConfig.setJdbcUrl(dbProps.getUrl());
-        dataSourceConfig.setUsername(dbProps.getUsername());
-        dataSourceConfig.setPassword(dbProps.getPassword());
-        dataSourceConfig.setMinimumIdle(dbProps.getMinIdle());
-        dataSourceConfig.setMaximumPoolSize(dbProps.getMaxPoolSize());
-
-        log.info("{}", dbProps);
-
-        return new HikariDataSource(dataSourceConfig);
-
-    }
-     */
-
+    
     @Bean
     @ConfigurationProperties(prefix = "swift.projection." + PROJECTION_NAME + ".database")
     public DatabasePropertiesDto databaseProperties() {

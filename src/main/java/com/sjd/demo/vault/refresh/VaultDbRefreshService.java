@@ -1,16 +1,17 @@
 package com.sjd.demo.vault.refresh;
 
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.*;
+import static org.springframework.util.StringUtils.isEmpty;
 
 import org.json.JSONObject;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import com.sjd.demo.vault.dto.refresh.CredentialsDto;
@@ -25,17 +26,21 @@ public class VaultDbRefreshService {
 
     private final CredentialsDto credentialsDto;
 
-    private int serverPort = 8080;
+    private final Environment env;
 
     private String vaultRootToken = "my-token";
+
     private String vaultScheme = "http";
+
     private String vaultHost = "127.0.0.1";
+
     private int vaultPort = 8200;
+
     private String vaultPath = "database/creds/read-write";
 
     //@Scheduled(cron = "${my.vault.token.renew.cron.expression}")
     //@Scheduled(initialDelay = 1000000, fixedDelay = 1000000)
-    public void renewMyRootToken() throws Exception {
+    public void renewVaultToken() throws Exception {
 
         log.debug("Renewing root token ...");
 
@@ -50,7 +55,7 @@ public class VaultDbRefreshService {
 
     //@Scheduled(cron = "${swift.credentials.renew-every}")
     @Scheduled(initialDelay = 120_000, fixedDelay = 120_000)
-    public void attemptARefresh() {
+    public void attemptCredentialsRefresh() {
 
         log.debug("Renewing db creds ...");
 
@@ -61,12 +66,12 @@ public class VaultDbRefreshService {
         }
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setContentType(APPLICATION_JSON);
         HttpEntity<String> httpEntity = new HttpEntity<>("", httpHeaders);
 
         log.debug("Refreshing ...");
 
-        new RestTemplate().exchange("http://localhost:" + serverPort + "/actuator/refresh", //
+        new RestTemplate().exchange("http://localhost:" + env.getProperty("server.port") + "/actuator/refresh", //
                 HttpMethod.POST, httpEntity, String.class);
 
     }
@@ -89,13 +94,12 @@ public class VaultDbRefreshService {
 
         if (OK == response.getStatusCode()) {
 
-            String vaultJsonString = response.getBody();
-            JSONObject vaultJsonObject = new JSONObject(vaultJsonString);
+            JSONObject vaultJsonObject = new JSONObject(response.getBody());
 
             latestDbUserName = vaultJsonObject.getJSONObject("data").getString("username");
             latestDbPassword = vaultJsonObject.getJSONObject("data").getString("password");
 
-            vaultCallSuccess = !StringUtils.isEmpty(latestDbUserName) && !StringUtils.isEmpty(latestDbPassword);
+            vaultCallSuccess = !isEmpty(latestDbUserName) && !isEmpty(latestDbPassword);
 
         }
 
