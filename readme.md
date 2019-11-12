@@ -26,7 +26,7 @@ make write-actor
 make refresh
 ```
 
-The times for theTTL of the DB connection are in the Makefile (currently set to 3m), whilst the refresh of the DB credentials is configured via the CRON property in the bootstrap.yml file (currently every 2 minutes)
+The times for theTTL of the DB connection are in the Makefile (currently set to 3m), whilst the refresh of the DB credentials is configured via the CRON property in the bootstrap.yml file (currently every 2m)
 
 **NOTE:** The refresh time should be shorter than the TTL time.
 
@@ -35,3 +35,7 @@ To stop the stack execute:
 ```
 make down
 ```
+
+Useful supporting code taken from here:
+
+https://www.epundit.co.uk/blogs/default/2017/09/07/1504773780000.html
